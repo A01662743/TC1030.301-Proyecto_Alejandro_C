@@ -74,6 +74,63 @@ void Vehiculo::vehiculo_print(){
 }
 #endif VEHICULO
 
+#ifndef MOTOR
+#define MOTOR
+
+class Motor{
+    //atributos
+    private:
+        string combustible;
+        string design;
+        int cilindros;
+    public:
+        //constructores
+        Motor();
+        Motor(string _combustible, string _design, int _cilindros);
+        //getters
+        string get_combustible();
+        string get_design();
+        int get_cilindros();
+        //setters
+        void set_combustible(string _combustible);
+        void set_design(string _design);
+        void set_cilindros(int _cilindros);
+};
+
+//constructores
+Motor::Motor(){
+    combustible = "undefined";
+    design = "undefined";
+    cilindros = 0;
+}
+Motor::Motor(string _combustible, string _design, int _cilindros){
+    combustible = _combustible;
+    design = _design;
+    cilindros = _cilindros;
+}
+//getters
+string Motor::get_combustible(){
+    return combustible;
+}
+string Motor::get_design(){
+    return design;
+}
+int Motor::get_cilindros(){
+    return cilindros;
+}
+//setters
+void Motor::set_combustible(string _combustible){
+    combustible = _combustible;
+}
+void Motor::set_design(string _design){
+    design = _design;
+}
+void Motor::set_cilindros(int _cilindros){
+    cilindros = _cilindros;
+}
+
+#endif MOTOR
+
 #ifndef ECO
 #define ECO
 
@@ -117,19 +174,22 @@ class Electric: public Vehiculo{
         float energy;
         float max_energy;
         float energy_per_km;
+        Motor motor;
     //métodos
     public:
         // Constructores
         Electric();
-        Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km);
+        Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km, string _corriente, string _design);
         //getters
         float get_energy();
         float get_max_energy();
         float get_energy_per_km();
+        Motor get_motor();
         //setters
         void set_energy(float _energy);
         void set_max_energy(float _max_energy);
         void set_energy_per_km(float _energy_per_km);
+        void set_motor(string _corriente, string _design);
         //metodos sobreescritos por polimorfismo
         void print();
         void restock(float percent);
@@ -141,11 +201,13 @@ Electric::Electric(): Vehiculo(){
     energy = 0;
     max_energy = 0;
     energy_per_km = 0;
+    motor = Motor();
 }
-Electric::Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km): Vehiculo(_marca, _modelo){
+Electric::Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km, string _corriente, string _design): Vehiculo(_marca, _modelo){
     energy = _energy;
     max_energy = _max_energy;
     energy_per_km = _energy_per_km;
+    motor = Motor(_corriente, _design, 0);
 }
 //getters
 float Electric::get_energy(){
@@ -157,6 +219,9 @@ float Electric::get_max_energy(){
 float Electric::get_energy_per_km(){
     return energy_per_km;
 }
+Motor Electric::get_motor(){
+    return motor;
+}
 //setters
 void Electric::set_energy(float _energy){
     energy = _energy;
@@ -167,10 +232,16 @@ void Electric::set_max_energy(float _max_energy){
 void Electric::set_energy_per_km(float _energy_per_km){
     energy_per_km = _energy_per_km;
 }
+void Electric::set_motor(string _corriente, string _design){
+    motor.set_combustible(_corriente);
+    motor.set_design(_design);
+    motor.set_cilindros(0);
+}
 //metodos sobreescritos por polimorfismo
 void Electric::print(){
     vehiculo_print();
     cout << "porcentaje de carga: " << energy << "%" << endl;
+    cout << "motor: " << motor.get_combustible() << "" << motor.get_design() << endl;
 }
 void Electric::restock(float percent){
     if (percent > 100 || percent <= 0 || percent < energy) {
@@ -203,19 +274,22 @@ class Gas: public Vehiculo{
         float gas; // en litros
         int gas_max; // en litros
         float gas_per_km;
+        Motor motor;
     //métodos
     public:
         // Constructores
         Gas();
-        Gas(string _marca, string _modelo, float _gas, int _gas_max, float _gas_per_km);
+        Gas(string _marca, string _modelo, float _gas, int _gas_max, float _gas_per_km, string _combustible, string _design, int _cilindros);
         //getters
         float get_gas();
         int get_gas_max();
         float get_gas_per_km();
+        Motor get_motor();
         //setters
         void set_gas(float _gas);
         void set_gas_max(int _gas_max);
         void set_gas_per_km(float _gas_per_km);
+        void set_motor(string _combustible, string _design, int _cilindros);
         //metodos sobreescritos por polimorfismo
         void print();
         void restock(float liters);
@@ -227,11 +301,13 @@ Gas::Gas(): Vehiculo(){
     gas = 0;
     gas_max = 0;
     gas_per_km = 0;
+    motor = Motor();
 }
-Gas::Gas(string _marca, string _modelo, float _gas, int _gas_max, float _gas_per_km): Vehiculo(_marca, _modelo){
+Gas::Gas(string _marca, string _modelo, float _gas, int _gas_max, float _gas_per_km, string _combustible, string _design, int _cilindros): Vehiculo(_marca, _modelo){
     gas = _gas;
     gas_max = _gas_max;
     gas_per_km = _gas_per_km;
+    motor = Motor(_combustible, _design, _cilindros);
 }
 //getters
 float Gas::get_gas(){
@@ -243,6 +319,9 @@ int Gas::get_gas_max(){
 float Gas::get_gas_per_km(){
     return gas_per_km;
 }
+Motor Gas::get_motor(){
+    return motor;
+}
 //setters
 void Gas::set_gas(float _gas){
     gas = _gas;
@@ -253,10 +332,17 @@ void Gas::set_gas_max(int _gas_max){
 void Gas::set_gas_per_km(float _gas_per_km){
     gas_per_km = _gas_per_km;
 }
-//metodos sobreescritos por polimorfismo
+void Gas::set_motor(string _combustible, string _design, int _cilindros){
+    motor.set_combustible(_combustible);
+    motor.set_design(_design);
+    motor.set_cilindros(_cilindros);
+}
+//metodos sobreescritos
 void Gas::print(){
     vehiculo_print();
     cout << "tanque: " << gas << " L" << endl;
+    cout << "tipo de combustible: " << motor.get_combustible() << endl;
+    cout << "motor: " << motor.get_design() << "-" << motor.get_cilindros() << endl;
 }
 void Gas::restock(float liters) {
     if (liters <= 0 || liters + gas > gas_max) {
