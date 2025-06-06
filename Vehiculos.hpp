@@ -68,9 +68,9 @@ void Vehiculo::ride (float km){
     km_recorridos = km + km_recorridos;
 }
 void Vehiculo::vehiculo_print(){
-    cout << "marca: " << marca << endl;
-    cout << "modelo: " << modelo << endl;
-    cout << "kilómetros recorridos: " << km_recorridos << " km" << endl;
+    cout << "   marca: " << marca << endl;
+    cout << "   modelo: " << modelo << endl;
+    cout << "   kilómetros recorridos: " << km_recorridos << " km" << endl;
 }
 #endif VEHICULO
 
@@ -142,7 +142,7 @@ class Eco: public Vehiculo{
         Eco(string _marca, string _modelo);
         //metodos sobreescritos por polimorfismo
         void print();
-        void restock(float _ignore);
+        void restock(float ignore);
         void stock_loss(float _km);
 };
 
@@ -154,8 +154,9 @@ Eco::Eco(string _marca, string _modelo): Vehiculo(_marca, _modelo){
 //metodos sobreescritos por polimorfismo
 void Eco::print(){
     vehiculo_print(); 
+    cout << endl;
 }
-void Eco::restock(float _ignore) {
+void Eco::restock(float ignore) {
     cout << endl << "no se puede recargar para este tipo de vehículo" << endl;
 }
 void Eco::stock_loss(float _km) {
@@ -179,7 +180,7 @@ class Electric: public Vehiculo{
     public:
         // Constructores
         Electric();
-        Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km, string _corriente, string _design);
+        Electric(string _marca, string _modelo, float _energy, float _max_energy, float _energy_per_km, string _corriente, string _design);
         //getters
         float get_energy();
         float get_max_energy();
@@ -203,7 +204,7 @@ Electric::Electric(): Vehiculo(){
     energy_per_km = 0;
     motor = Motor();
 }
-Electric::Electric(string _marca, string _modelo, float _energy, int _max_energy, float _energy_per_km, string _corriente, string _design): Vehiculo(_marca, _modelo){
+Electric::Electric(string _marca, string _modelo, float _energy, float _max_energy, float _energy_per_km, string _corriente, string _design): Vehiculo(_marca, _modelo){
     energy = _energy;
     max_energy = _max_energy;
     energy_per_km = _energy_per_km;
@@ -240,8 +241,9 @@ void Electric::set_motor(string _corriente, string _design){
 //metodos sobreescritos por polimorfismo
 void Electric::print(){
     vehiculo_print();
-    cout << "porcentaje de carga: " << energy << "%" << endl;
-    cout << "motor: " << motor.get_combustible() << "" << motor.get_design() << endl;
+    cout << "   porcentaje de carga: " << energy << "%" << endl;
+    cout << "   motor: " << motor.get_combustible() << " " << motor.get_design() << endl;
+    cout << endl;
 }
 void Electric::restock(float percent){
     if (percent > 100 || percent <= 0 || percent < energy) {
@@ -340,9 +342,10 @@ void Gas::set_motor(string _combustible, string _design, int _cilindros){
 //metodos sobreescritos
 void Gas::print(){
     vehiculo_print();
-    cout << "tanque: " << gas << " L" << endl;
-    cout << "tipo de combustible: " << motor.get_combustible() << endl;
-    cout << "motor: " << motor.get_design() << "-" << motor.get_cilindros() << endl;
+    cout << "   tanque: " << gas << " L" << endl;
+    cout << "   tipo de combustible: " << motor.get_combustible() << endl;
+    cout << "   motor: " << motor.get_design() << "-" << motor.get_cilindros() << endl;
+    cout << endl;
 }
 void Gas::restock(float liters) {
     if (liters <= 0 || liters + gas > gas_max) {
@@ -365,3 +368,104 @@ void Gas::stock_loss(float _km) {
 }
 
 #endif GAS
+
+#ifndef COCHERA
+#define COCHERA
+
+class Cochera {
+    //atributos
+    private:
+        Vehiculo** vehiculos;
+        int nvehiculos = 0;
+        int capacidad;
+    //métodos
+    public:
+        //constructores
+        Cochera();
+        Cochera(int _capacidad);
+        //getters
+        int get_capacidad();
+        int get_nvehiculos();
+        Vehiculo** get_vehiculos();
+        //métodos especiales
+        void addVehiculo(Vehiculo* v);
+        int buscar_por_nombre(string _marca, string _modelo);
+        void eliminar(string _marca, string _modelo);
+        void print();
+};
+
+Cochera::Cochera() {
+    capacidad = 0;
+}
+
+Cochera::Cochera(int _capacidad) {
+    capacidad = _capacidad;
+    vehiculos = new Vehiculo* [capacidad];
+}
+
+int Cochera::get_capacidad() {
+    return capacidad;
+}
+
+int Cochera::get_nvehiculos() {
+    return nvehiculos;
+}
+
+Vehiculo** Cochera::get_vehiculos() {
+    return vehiculos;
+}
+
+void Cochera::addVehiculo(Vehiculo* v) {
+    if(nvehiculos < capacidad) {
+        vehiculos[nvehiculos] = v;
+        nvehiculos++;
+        cout << endl << "Vehículo agregado a la cochera." << endl << endl;
+    }
+    else{
+        cout << endl <<"No se puede agregar más vehículos, cochera llena." << endl << endl;
+    }
+}
+
+int Cochera::buscar_por_nombre(string _marca, string _modelo){
+    for(int i = 0; i < nvehiculos; i++){
+        if (vehiculos[i] -> get_marca() == _marca){
+            if (vehiculos[i] -> get_modelo() == _modelo){
+                return(i);
+            }
+        }
+    }
+    return -1;
+}
+
+void Cochera::eliminar(string _marca, string _modelo){
+    int i = buscar_por_nombre(_marca, _modelo);
+    string text;
+    if (i == -1){
+        text = "elemento no encontrado";
+    }
+    else{
+        nvehiculos = nvehiculos - 1;
+        for (int j = i; j < nvehiculos; j++) {
+            if (j == capacidad - 1) {
+                vehiculos[j] = nullptr; // Evitar puntero colgante
+            }
+            else{
+            vehiculos[j] = vehiculos[j + 1];
+            }
+        }
+        text = "elemento eliminado";
+    }
+    cout << endl << text << endl << endl;
+}
+
+void Cochera::print() {
+    cout << endl << "Cochera con capacidad para " << capacidad << " vehículos." << endl;
+    cout << "Número de vehículos en la cochera: " << nvehiculos << endl << endl;
+    for(int i = 0; i < nvehiculos; i++) {
+        cout << "Vehículo " << (i + 1) << ":" << endl;
+        vehiculos[i]->print();
+        cout << endl << endl;
+    }
+}
+
+#endif COCHERA
