@@ -13,12 +13,12 @@
 
 #include <iostream>
 #include <typeinfo>
-#include "Vehiculo.cpp"
-#include "Cochera.cpp"
-#include "Electric.cpp"
-#include "Gas.cpp"
-#include "Eco.cpp"
-#include "Motor.cpp"
+#include "Vehiculo.hpp"
+#include "Cochera.hpp"
+#include "Electric.hpp"
+#include "Gas.hpp"
+#include "Eco.hpp"
+#include "Motor.hpp"
 
 using namespace std;
 
@@ -323,7 +323,7 @@ int main() {
         //agregar vehículos demo
         else if (opcion == 6){
             if (cochera -> get_nvehiculos() > 0){
-                cout << endl << "No se pueden agregar vehículos de demostración, la cochera ya tiene vehículo(s)." << endl;
+                cout << endl << "No se pueden agregar vehículos de demostración, la cochera ya tiene vehículos." << endl;
                 continue;
             }
             else if (cochera -> get_capacidad() < 3){
