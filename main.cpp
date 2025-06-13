@@ -1,6 +1,24 @@
+/*
+ * Proyecto Vehiculos main
+ * Alejandro Contreras Magallanes
+ * A01662770
+ *
+ * Este es un proyecto que modela
+ * una cochera que puede almacenar
+ * vehículos de diferentes tipos:
+ * eléctricos, a base de gasolina y ecológicos.
+ * Permite agregar vehículos, añadir kilómetros recorridos
+ * entre otros
+ */
+
 #include <iostream>
 #include <typeinfo>
-#include "Vehiculos.hpp"
+#include "Vehiculo.cpp"
+#include "Cochera.cpp"
+#include "Electric.cpp"
+#include "Gas.cpp"
+#include "Eco.cpp"
+#include "Motor.cpp"
 
 using namespace std;
 
@@ -16,7 +34,7 @@ int main() {
     }
     Cochera* cochera = new Cochera(opcion);
     while (true){
-        cout << endl << endl << "1 - vehiculo nuevo\n2 - añadir kilómetros a vehículo\n3 - recargar vehículo\n4 - eliminar vehíulo\n5 - Mostrar vehículos\ncualquier otro número para finalizar el programa" << endl;
+        cout << endl << endl << "1 - vehiculo nuevo\n2 - añadir kilómetros a vehículo\n3 - recargar vehículo\n4 - eliminar vehíulo\n5 - Mostrar vehículos\n6 - Generar coches Demo\ncualquier otro número para finalizar el programa" << endl;
         cin >> opcion;
 
         //agregar vehiculo
@@ -299,6 +317,30 @@ int main() {
             }
             //mostrar vehiculos
             else{
+                cochera -> print();
+            }
+        }
+        //agregar vehículos demo
+        else if (opcion == 6){
+            if (cochera -> get_nvehiculos() > 0){
+                cout << endl << "No se pueden agregar vehículos de demostración, la cochera ya tiene vehículo(s)." << endl;
+                continue;
+            }
+            else if (cochera -> get_capacidad() < 3){
+                cout << endl << "No se pueden agregar vehículos de demostración, la cochera no tiene suficiente capacidad." << endl;
+                continue;
+            }
+            else {
+                //eléctrico
+                Electric* electric_1 = new Electric("Tesla", "Model S", 80, 100, 0.2, "AC", "sincrónico");
+                cochera -> addVehiculo(electric_1);
+                //gasolina
+                Gas* gas_1 = new Gas("Ford", "Mustang", 50, 60, 0.15, "gasolina", "V", 8);
+                cochera -> addVehiculo(gas_1);
+                //ecológico
+                Eco* eco_1 = new Eco("Toyota", "Prius");
+                cochera -> addVehiculo(eco_1);
+                cout << endl << "Vehículos de demostración agregados." << endl;
                 cochera -> print();
             }
         }
