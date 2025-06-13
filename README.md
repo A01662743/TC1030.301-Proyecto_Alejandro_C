@@ -25,6 +25,8 @@ En caso de introducir valores de un tipo no correspondiente al esperado el progr
 
 Aunque sea poco probable el uso del programa de forma masiva (exceso de vehículos), esto puede marcar error a falta de espacio o manejo de este.
 
+En caso de complicar con g++, utilizar el siguiente comando: g++ Cochera.cpp Eco.cpp Electric.cpp Gas.cpp Motor.cpp Vehiculo.cpp main.cpp
+
 ## Versiones y correcciones
 May 15, 2025 : UML inicial, .hpp inicial (clase Vehiculo)
 
@@ -37,6 +39,8 @@ Jun 1, 2025 : arreglo de error en include de .hpp
 Jun 5, 2025 : Clase agregada (Cochera), UML actualizado, .cpp (main) actualizado, README
 
 Jun 12, 2025 : Reestructuración de las clases en distintos archivos, main modificado, UML final
+
+Jun13, 2025 : corrección incluir archivos en main
 
 ## Documentación
 
