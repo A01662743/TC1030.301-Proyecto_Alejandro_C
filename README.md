@@ -34,7 +34,9 @@ May 29, 2025 : Clase compuesta (Motor), .cpp (main) inicial
 
 Jun 1, 2025 : arreglo de error en include de .hpp
 
-Jun 5, 2025 : Clase agregada (Cochera), UML final, .cpp (main) final, README
+Jun 5, 2025 : Clase agregada (Cochera), UML actualizado, .cpp (main) actualizado, README
+
+Jun 12, 2025 : Reestructuración de las clases en distintos archivos, main modificado, UML final
 
 ## Documentación
 
